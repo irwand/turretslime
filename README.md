@@ -1,2 +1,2 @@
 # turretslime
-for learning git
+for learning git and having fun
