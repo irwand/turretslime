@@ -66,7 +66,7 @@ class Turret(Sprite):
             return [hurtful_obj, self]
         else:
             return [hurtful_obj]
-            
+
 class EnemyBlob(Sprite):
     def __init__(self, pos):
         super().__init__("assets/monster/slime1_side.png", pos, double = True, flip_lengthwise = True, num_o_animation_cycles = 4)
@@ -91,7 +91,7 @@ class Bullet(Sprite):
         self.what_to_blit = append_reverse(self.what_to_blit)
     def update(self):
         self.position = (self.position[0] - 10, self.position[1])
-        
+
 class Missile(Sprite):
     def __init__(self,pos):
         super().__init__("assets/other/rocket.png",pos, direction = 180)
@@ -137,16 +137,32 @@ def append_reverse(flippin_list):
         completed_list.append(flippin_list[flipped_list_nums[iterating]])
     return completed_list
 
+def draw_background_and_grid(background, gridbool):
+    """args: background surface and if you want a grid or not"""
+    background_rect = background.get_rect()
+    return_this_surface = pygame.Surface((width,height))
+    for x in range (0, width, background_rect.width):
+        for y in range (0, height, background_rect.height):
+            return_this_surface.blit(background, (x,y))
+    lines = 8
+    (xw1, yw1, xw2, yw2) = (0, 0, width, 0)
+    (xh1, yh1, xh2, yh2) = (0, 0, 0, height)
+    if gridbool:
+        for a in range (lines):
+            pygame.draw.line(return_this_surface, (0,0,0), (xw1, yw1), (xw2, yw2))
+            yw1 += 75
+            yw2 += 75
+        for b in range (lines):
+            pygame.draw.line(return_this_surface, (0,0,0), (xh1, yh1), (xh2, yh2))
+            xh1 += 100
+            xh2 += 100
+    return return_this_surface
+
 Clock = pygame.time.Clock()
 
 (width, height) = (800, 600)
-bg_surface = pygame.Surface((width,height))
 pixel_grass = pygame.image.load("assets/background/rPixel_Grass_mirror.png")
-pixel_grass_rect = pixel_grass.get_rect()
-for x in range (0, 800, pixel_grass_rect.width):
-    for y in range(0, 600, pixel_grass_rect.height):
-        bg_surface.blit(pixel_grass, (x,y))
-
+bg_surface = draw_background_and_grid(pixel_grass, True)
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Pygame Tower Defense")
 
